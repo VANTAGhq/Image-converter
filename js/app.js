@@ -1,0 +1,194 @@
+/**
+ * Punto de entrada de la aplicacion.
+ * Conecta los modulos entre si y bindea los eventos del DOM.
+ */
+(function () {
+    'use strict';
+
+    var formatTabsEl = document.getElementById('formatTabs');
+    var formatWarningEl = document.getElementById('formatWarning');
+    var dropzone = document.getElementById('dropzone');
+    var fileInput = document.getElementById('fileInput');
+    var imageListEl = document.getElementById('imageList');
+    var globalControlsEl = document.getElementById('globalControls');
+
+    var globalQuality = document.getElementById('globalQuality');
+    var globalQualityValue = document.getElementById('globalQualityValue');
+    var globalScale = document.getElementById('globalScale');
+    var globalScaleValue = document.getElementById('globalScaleValue');
+    var globalMaxWidth = document.getElementById('globalMaxWidth');
+    var globalMaxHeight = document.getElementById('globalMaxHeight');
+
+    // -- Auto-reconversion con debounce --
+
+    var reconvertTimers = {};
+
+    function scheduleReconvert(id) {
+        if (reconvertTimers[id]) clearTimeout(reconvertTimers[id]);
+        reconvertTimers[id] = setTimeout(function () {
+            delete reconvertTimers[id];
+            var img = ImageStore.getById(id);
+            if (!img || img.status === 'converting') return;
+            Converter.convertOne(img, render);
+        }, 400);
+    }
+
+    function reconvertAll() {
+        var pending = ImageStore.getPending();
+        if (pending.length > 0) {
+            Converter.convertAll(pending, render);
+        }
+    }
+
+    // -- Handlers que se pasan a CardBuilder --
+
+    var cardHandlers = {
+        onDownload: function (id) {
+            var img = ImageStore.getById(id);
+            Downloader.downloadOne(img);
+        },
+        onConvert: function (id) {
+            var img = ImageStore.getById(id);
+            if (!img || img.status === 'converting') return;
+            Converter.convertOne(img, render);
+        },
+        onRemove: function (id) {
+            ImageStore.remove(id);
+        },
+        onSetting: function (id, key, value) {
+            ImageStore.updateSetting(id, key, value);
+            scheduleReconvert(id);
+        },
+        onToggleAspect: function (id) {
+            ImageStore.toggleAspectRatio(id);
+            scheduleReconvert(id);
+        }
+    };
+
+    // -- Render --
+
+    function render() {
+        var images = ImageStore.getAll();
+
+        if (images.length > 0) {
+            globalControlsEl.classList.add('visible');
+        } else {
+            globalControlsEl.classList.remove('visible');
+        }
+
+        imageListEl.textContent = '';
+        images.forEach(function (img) {
+            imageListEl.appendChild(CardBuilder.build(img, cardHandlers));
+        });
+    }
+
+    // -- Gestion de archivos --
+
+    function handleFiles(fileList) {
+        for (var i = 0; i < fileList.length; i++) {
+            if (Utils.isValidImageType(fileList[i].type)) {
+                ImageStore.add(fileList[i]);
+            }
+        }
+        render();
+    }
+
+    // -- Eventos: Dropzone --
+
+    dropzone.addEventListener('click', function () { fileInput.click(); });
+
+    dropzone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', function () {
+        dropzone.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', function () {
+        handleFiles(fileInput.files);
+        fileInput.value = '';
+    });
+
+    // -- Deteccion de soporte y aviso --
+
+    function updateFormatWarning(format) {
+        Utils.checkFormatSupport(format).then(function (supported) {
+            if (!supported) {
+                formatWarningEl.textContent =
+                    format.toUpperCase() + ' no esta soportado por tu navegador. ' +
+                    'Prueba con Chrome 121+ o Firefox 135+ para AVIF.';
+                formatWarningEl.classList.remove('hidden');
+            } else {
+                formatWarningEl.classList.add('hidden');
+            }
+        });
+    }
+
+    // Precargar deteccion de ambos formatos
+    Utils.checkFormatSupport('webp');
+    Utils.checkFormatSupport('avif');
+
+    // -- Eventos: Pestanas de formato --
+
+    formatTabsEl.addEventListener('click', function (e) {
+        var tab = e.target.closest('.tab');
+        if (!tab) return;
+
+        var format = tab.dataset.format;
+        if (format === ImageStore.getFormat()) return;
+
+        var tabs = formatTabsEl.querySelectorAll('.tab');
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove('active');
+        }
+        tab.classList.add('active');
+
+        updateFormatWarning(format);
+        ImageStore.setFormatAll(format);
+        reconvertAll();
+    });
+
+    // -- Eventos: Controles globales --
+
+    globalQuality.addEventListener('input', function () {
+        globalQualityValue.textContent = this.value + '%';
+    });
+
+    globalScale.addEventListener('input', function () {
+        globalScaleValue.textContent = this.value + '%';
+    });
+
+    document.getElementById('btnApplyAll').addEventListener('click', function () {
+        ImageStore.applyToAll({
+            quality: parseInt(globalQuality.value, 10),
+            scale: parseInt(globalScale.value, 10),
+            maxWidth: parseInt(globalMaxWidth.value, 10) || 0,
+            maxHeight: parseInt(globalMaxHeight.value, 10) || 0
+        });
+        reconvertAll();
+    });
+
+    document.getElementById('btnConvertAll').addEventListener('click', function () {
+        Converter.convertAll(ImageStore.getPending(), render);
+    });
+
+    document.getElementById('btnDownloadZip').addEventListener('click', function () {
+        Downloader.downloadZip(ImageStore.getDone());
+    });
+
+    document.getElementById('btnClearAll').addEventListener('click', function () {
+        ImageStore.clear();
+    });
+
+    // -- Suscripcion a cambios del store --
+
+    ImageStore.onChange(render);
+})();

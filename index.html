@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Imagenes</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Conversor de Imagenes</h1>
+        <p class="subtitle">Convierte JPG, PNG y JPEG a WebP o AVIF con control individual de calidad y tamano</p>
+
+        <div class="format-tabs" id="formatTabs">
+            <button class="tab active" data-format="webp">WebP</button>
+            <button class="tab" data-format="avif">AVIF</button>
+        </div>
+        <div class="format-warning hidden" id="formatWarning"></div>
+
+        <div class="dropzone" id="dropzone">
+            <div class="dropzone-icon">+</div>
+            <div class="dropzone-text">
+                Arrastra imagenes aqui o <strong>haz clic para seleccionar</strong>
+            </div>
+            <div class="dropzone-text dropzone-formats">JPG, JPEG, PNG</div>
+            <input type="file" id="fileInput" multiple accept="image/jpeg,image/png,image/jpg">
+        </div>
+
+        <div class="global-controls" id="globalControls">
+            <div class="control-group">
+                <label for="globalQuality">Calidad global</label>
+                <div class="control-row">
+                    <input type="range" id="globalQuality" min="1" max="100" value="80">
+                    <span class="range-value" id="globalQualityValue">80%</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="globalScale">Escala global (%)</label>
+                <div class="control-row">
+                    <input type="range" id="globalScale" min="1" max="100" value="100">
+                    <span class="range-value" id="globalScaleValue">100%</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="globalMaxWidth">Ancho max (px)</label>
+                <input type="number" id="globalMaxWidth" min="0" value="0" placeholder="0=sin limite">
+            </div>
+            <div class="control-group">
+                <label for="globalMaxHeight">Alto max (px)</label>
+                <input type="number" id="globalMaxHeight" min="0" value="0" placeholder="0=sin limite">
+            </div>
+            <div class="global-actions">
+                <button class="btn btn-apply-all" id="btnApplyAll">Aplicar a todas</button>
+                <button class="btn btn-primary" id="btnConvertAll">Convertir todas</button>
+                <button class="btn btn-secondary" id="btnDownloadZip">Descargar ZIP</button>
+                <button class="btn btn-danger" id="btnClearAll">Limpiar</button>
+            </div>
+        </div>
+
+        <div class="image-list" id="imageList"></div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/image-store.js"></script>
+    <script src="js/converter.js"></script>
+    <script src="js/card-builder.js"></script>
+    <script src="js/downloader.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
