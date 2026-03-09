@@ -1,0 +1,127 @@
+    <!-- HERRAMIENTA WEBP -->
+    <main>
+        <div class="container">
+
+            <h1>{{webp.h1}}</h1>
+            <p class="subtitle">{{webp.subtitle}}</p>
+
+            <div class="format-tabs" id="formatTabs">
+                <button class="tab active" data-format="webp">WebP</button>
+                <button class="tab"        data-format="avif">AVIF</button>
+            </div>
+            <div class="format-warning hidden" id="formatWarning"></div>
+
+            <div class="dropzone" id="dropzone">
+                <div class="dropzone-icon">+</div>
+                <div class="dropzone-text">{{webp.dropzone.main}}</div>
+                <div class="dropzone-text dropzone-formats">{{webp.dropzone.formats}}</div>
+                <input type="file" id="fileInput" multiple accept="image/jpeg,image/png,image/jpg,image/webp">
+            </div>
+
+            <div class="global-controls" id="globalControls">
+                <div class="control-group">
+                    <label for="globalQuality">{{webp.label.quality}}</label>
+                    <div class="control-row">
+                        <input type="range" id="globalQuality" min="1" max="100" value="80">
+                        <span class="range-value" id="globalQualityValue">80%</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="globalScale">{{webp.label.scale}}</label>
+                    <div class="control-row">
+                        <input type="range" id="globalScale" min="1" max="100" value="100">
+                        <span class="range-value" id="globalScaleValue">100%</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="globalMaxWidth">{{webp.label.maxwidth}}</label>
+                    <input type="number" id="globalMaxWidth" min="0" value="0" placeholder="{{webp.input.nolimit}}">
+                </div>
+                <div class="control-group">
+                    <label for="globalMaxHeight">{{webp.label.maxheight}}</label>
+                    <input type="number" id="globalMaxHeight" min="0" value="0" placeholder="{{webp.input.nolimit}}">
+                </div>
+                <div class="global-actions">
+                    <button class="btn btn-apply-all" id="btnApplyAll">{{webp.btn.apply}}</button>
+                    <button class="btn btn-secondary" id="btnDownloadZip">{{webp.btn.zip}}</button>
+                    <button class="btn btn-danger"    id="btnClearAll">{{webp.btn.clear}}</button>
+                </div>
+            </div>
+
+            <div class="image-list" id="imageList" aria-live="polite"></div>
+
+            <!-- CONTENIDO SEO -->
+            <section class="seo-content" aria-label="{{webp.seo.aria.label}}">
+
+                <div class="seo-grid">
+                    <article class="seo-card">
+                        <h2>{{webp.seo.card1.h2}}</h2>
+                        <p>{{webp.seo.card1.p1}}</p>
+                        <p>{{webp.seo.card1.p2}}</p>
+                    </article>
+                    <article class="seo-card">
+                        <h2>{{webp.seo.card2.h2}}</h2>
+                        <p>{{webp.seo.card2.p1}}</p>
+                        <p>{{webp.seo.card2.p2}}</p>
+                    </article>
+                    <article class="seo-card">
+                        <h2>{{webp.seo.card3.h2}}</h2>
+                        <p>{{webp.seo.card3.p1}}</p>
+                        <p>{{webp.seo.card3.p2}}</p>
+                    </article>
+                    <article class="seo-card">
+                        <h2>{{webp.seo.card4.h2}}</h2>
+                        <p>{{webp.seo.card4.p1}}</p>
+                        <p>{{webp.seo.card4.p2}}</p>
+                    </article>
+                </div>
+
+                <div class="seo-info">
+                    <h2>{{webp.seo.info.h2}}</h2>
+                    <h3>{{webp.seo.info.h3a}}</h3>
+                    <p>{{webp.seo.info.p1}}</p>
+                    <p>{{webp.seo.info.p2}}</p>
+
+                    <h3>{{webp.seo.info.h3b}}</h3>
+                    <ul>{{webp.seo.info.from}}</ul>
+
+                    <h3>{{webp.seo.info.h3c}}</h3>
+                    <ul>{{webp.seo.info.to}}</ul>
+                </div>
+
+                <div class="seo-faq">
+                    <h2>{{webp.faq.title}}</h2>
+
+                    <details class="faq-item" open>
+                        <summary><h3>{{webp.faq.q1.q}}</h3></summary>
+                        <p>{{webp.faq.q1.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{webp.faq.q2.q}}</h3></summary>
+                        <p>{{webp.faq.q2.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{webp.faq.q3.q}}</h3></summary>
+                        <p>{{webp.faq.q3.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{webp.faq.q4.q}}</h3></summary>
+                        <p>{{webp.faq.q4.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{webp.faq.q5.q}}</h3></summary>
+                        <p>{{webp.faq.q5.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{webp.faq.q6.q}}</h3></summary>
+                        <p>{{webp.faq.q6.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{webp.faq.q7.q}}</h3></summary>
+                        <p>{{webp.faq.q7.a}}</p>
+                    </details>
+                </div>
+
+            </section>
+        </div>
+    </main>

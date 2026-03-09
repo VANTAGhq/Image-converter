@@ -5,12 +5,10 @@
 var CardBuilder = (function () {
     'use strict';
 
-    var STATUS_LABELS = {
-        pending: 'Pendiente',
-        converting: 'Convirtiendo',
-        done: 'Listo',
-        error: 'Error'
-    };
+    function statusLabel(s) {
+        var map = { pending: 'card.pending', converting: 'card.converting', done: 'card.done', error: 'card.error' };
+        return I18n.t(map[s] || s);
+    }
 
     function build(img, handlers) {
         var el = Utils.createElement;
@@ -68,26 +66,26 @@ var CardBuilder = (function () {
         var formatBadge = Utils.createElement('span', 'format-badge', img.format.toUpperCase());
         actions.appendChild(formatBadge);
 
-        var statusText = img.status === 'error' && img.errorMsg ? img.errorMsg : STATUS_LABELS[img.status];
+        var statusText = img.status === 'error' && img.errorMsg ? img.errorMsg : statusLabel(img.status);
         var badge = Utils.createElement('span', 'status-badge ' + img.status, statusText);
         actions.appendChild(badge);
 
         if (img.status === 'done') {
             var dlBtn = Utils.createElement('button', 'btn-icon', '\u2B07');
-            dlBtn.title = 'Descargar';
+            dlBtn.title = I18n.t('card.download');
             dlBtn.addEventListener('click', function () { handlers.onDownload(img.id); });
             actions.appendChild(dlBtn);
         }
 
         if (img.status === 'pending') {
             var playBtn = Utils.createElement('button', 'btn-icon', '\u25B6');
-            playBtn.title = 'Convertir';
+            playBtn.title = I18n.t('card.convert');
             playBtn.addEventListener('click', function () { handlers.onConvert(img.id); });
             actions.appendChild(playBtn);
         }
 
         var delBtn = Utils.createElement('button', 'btn-icon delete', '\u2715');
-        delBtn.title = 'Eliminar';
+        delBtn.title = I18n.t('card.remove');
         delBtn.addEventListener('click', function () { handlers.onRemove(img.id); });
         actions.appendChild(delBtn);
 
@@ -97,19 +95,19 @@ var CardBuilder = (function () {
     function buildControls(img, handlers) {
         var controls = Utils.createElement('div', 'card-controls');
 
-        controls.appendChild(buildRangeControl('Calidad', img.quality, '%', function (val) {
+        controls.appendChild(buildRangeControl(I18n.t('card.quality'), img.quality, '%', function (val) {
             handlers.onSetting(img.id, 'quality', val);
         }));
 
-        controls.appendChild(buildRangeControl('Escala', img.scale, '%', function (val) {
+        controls.appendChild(buildRangeControl(I18n.t('card.scale'), img.scale, '%', function (val) {
             handlers.onSetting(img.id, 'scale', val);
         }));
 
-        controls.appendChild(buildNumberControl('Max W', img.maxWidth, function (val) {
+        controls.appendChild(buildNumberControl(I18n.t('card.maxw'), img.maxWidth, function (val) {
             handlers.onSetting(img.id, 'maxWidth', val);
         }));
 
-        controls.appendChild(buildNumberControl('Max H', img.maxHeight, function (val) {
+        controls.appendChild(buildNumberControl(I18n.t('card.maxh'), img.maxHeight, function (val) {
             handlers.onSetting(img.id, 'maxHeight', val);
         }));
 
@@ -166,7 +164,7 @@ var CardBuilder = (function () {
             'lock-icon' + (img.keepAspectRatio ? ' locked' : ''),
             img.keepAspectRatio ? '\uD83D\uDD17' : '\uD83D\uDD13'
         );
-        icon.title = 'Mantener proporcion';
+        icon.title = I18n.t('card.lock');
         icon.addEventListener('click', function () { handlers.onToggleAspect(img.id); });
         wrap.appendChild(icon);
         return wrap;
@@ -181,7 +179,7 @@ var CardBuilder = (function () {
         if (hasDims) {
             var dimsRow = Utils.createElement('span', 'info-detail');
 
-            var dimsLabel = Utils.createElement('span', 'info-label', 'Dimensiones: ');
+            var dimsLabel = Utils.createElement('span', 'info-label', I18n.t('card.dims'));
             dimsRow.appendChild(dimsLabel);
 
             var originalDims = img.naturalWidth + '\u00D7' + img.naturalHeight;
@@ -203,7 +201,7 @@ var CardBuilder = (function () {
 
         // -- Fila de peso (siempre muestra original, y resultado si ya esta convertida) --
         var weightRow = Utils.createElement('span', 'info-detail');
-        var weightLabel = Utils.createElement('span', 'info-label', 'Peso: ');
+        var weightLabel = Utils.createElement('span', 'info-label', I18n.t('card.size'));
         weightRow.appendChild(weightLabel);
 
         if (img.status === 'done') {

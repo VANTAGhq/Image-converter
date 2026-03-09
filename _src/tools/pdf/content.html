@@ -1,0 +1,121 @@
+    <!-- HERRAMIENTA COMPRIMIR PDF -->
+    <main>
+        <div class="container">
+
+            <h1>{{pdf.h1}}</h1>
+            <p class="subtitle">{{pdf.subtitle}}</p>
+
+            <!-- Dropzone (oculto cuando hay archivo cargado) -->
+            <div class="dropzone" id="pdfDropzone">
+                <div class="dropzone-icon">📄</div>
+                <div class="dropzone-text">{{pdf.dropzone.main}}</div>
+                <div class="dropzone-text dropzone-formats">{{pdf.dropzone.sub}}</div>
+                <div class="dropzone-text dropzone-formats">{{pdf.dropzone.formats}}</div>
+                <input type="file" id="pdfFileInput" accept="application/pdf">
+            </div>
+
+            <!-- Panel de compresión (oculto hasta que se cargue un archivo) -->
+            <div class="pdf-panel hidden" id="pdfPanel">
+
+                <div class="pdf-file-info" id="pdfFileInfo">
+                    <div class="pdf-file-icon">📄</div>
+                    <div class="pdf-file-details">
+                        <span class="pdf-file-name" id="pdfFileName"></span>
+                        <span class="pdf-file-meta" id="pdfFileMeta"></span>
+                    </div>
+                    <button class="btn btn-ghost pdf-clear-btn" id="btnPdfClear">✕</button>
+                </div>
+
+                <div class="pdf-controls">
+                    <div class="pdf-quality-row">
+                        <label for="pdfQuality">{{pdf.label.quality}}</label>
+                        <div class="pdf-quality-track">
+                            <span class="pdf-quality-hint">{{pdf.label.quality.low}}</span>
+                            <input type="range" id="pdfQuality" min="10" max="100" value="60">
+                            <span class="pdf-quality-hint">{{pdf.label.quality.high}}</span>
+                        </div>
+                        <span class="range-value" id="pdfQualityValue">60%</span>
+                    </div>
+                    <button class="btn btn-primary btn-compress" id="btnCompress">{{pdf.btn.compress}}</button>
+                </div>
+
+                <!-- Progreso -->
+                <div class="pdf-progress hidden" id="pdfProgress">
+                    <div class="pdf-progress-bar">
+                        <div class="pdf-progress-fill" id="pdfProgressFill"></div>
+                    </div>
+                    <span class="pdf-progress-text" id="pdfProgressText"></span>
+                </div>
+
+                <!-- Resultado -->
+                <div class="pdf-result hidden" id="pdfResult">
+                    <div class="pdf-result-stats">
+                        <div class="pdf-stat">
+                            <span class="pdf-stat-label">{{pdf.label.original}}</span>
+                            <span class="pdf-stat-value" id="statOriginal"></span>
+                        </div>
+                        <div class="pdf-stat-arrow">→</div>
+                        <div class="pdf-stat">
+                            <span class="pdf-stat-label">{{pdf.label.compressed}}</span>
+                            <span class="pdf-stat-value" id="statCompressed"></span>
+                        </div>
+                        <div class="pdf-stat pdf-stat--highlight">
+                            <span class="pdf-stat-label">{{pdf.label.reduction}}</span>
+                            <span class="pdf-stat-value" id="statReduction"></span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-compress" id="btnDownload">{{pdf.btn.download}}</button>
+                </div>
+
+            </div>
+
+            <!-- CONTENIDO SEO -->
+            <section class="seo-content" aria-label="{{pdf.seo.aria.label}}">
+
+                <div class="seo-grid">
+                    <article class="seo-card">
+                        <h2>{{pdf.seo.card1.h2}}</h2>
+                        <p>{{pdf.seo.card1.p}}</p>
+                    </article>
+                    <article class="seo-card">
+                        <h2>{{pdf.seo.card2.h2}}</h2>
+                        <p>{{pdf.seo.card2.p}}</p>
+                    </article>
+                    <article class="seo-card">
+                        <h2>{{pdf.seo.card3.h2}}</h2>
+                        <p>{{pdf.seo.card3.p}}</p>
+                    </article>
+                    <article class="seo-card">
+                        <h2>{{pdf.seo.card4.h2}}</h2>
+                        <p>{{pdf.seo.card4.p}}</p>
+                    </article>
+                </div>
+
+                <div class="seo-faq">
+                    <h2>{{pdf.faq.title}}</h2>
+
+                    <details class="faq-item" open>
+                        <summary><h3>{{pdf.faq.q1.q}}</h3></summary>
+                        <p>{{pdf.faq.q1.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{pdf.faq.q2.q}}</h3></summary>
+                        <p>{{pdf.faq.q2.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{pdf.faq.q3.q}}</h3></summary>
+                        <p>{{pdf.faq.q3.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{pdf.faq.q4.q}}</h3></summary>
+                        <p>{{pdf.faq.q4.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{pdf.faq.q5.q}}</h3></summary>
+                        <p>{{pdf.faq.q5.a}}</p>
+                    </details>
+                </div>
+
+            </section>
+        </div>
+    </main>

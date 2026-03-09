@@ -1,0 +1,127 @@
+    <!-- HERRAMIENTA PRINCIPAL -->
+    <main>
+        <div class="container">
+
+            <h1>{{h1}}</h1>
+            <p class="subtitle">{{subtitle}}</p>
+
+            <div class="format-tabs" id="formatTabs">
+                <button class="tab active" data-format="webp">WebP</button>
+                <button class="tab"        data-format="avif">AVIF</button>
+            </div>
+            <div class="format-warning hidden" id="formatWarning"></div>
+
+            <div class="dropzone" id="dropzone">
+                <div class="dropzone-icon">+</div>
+                <div class="dropzone-text">{{dropzone.main}}</div>
+                <div class="dropzone-text dropzone-formats">{{dropzone.formats}}</div>
+                <input type="file" id="fileInput" multiple accept="image/jpeg,image/png,image/jpg,image/webp">
+            </div>
+
+            <div class="global-controls" id="globalControls">
+                <div class="control-group">
+                    <label for="globalQuality">{{label.quality}}</label>
+                    <div class="control-row">
+                        <input type="range" id="globalQuality" min="1" max="100" value="80">
+                        <span class="range-value" id="globalQualityValue">80%</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="globalScale">{{label.scale}}</label>
+                    <div class="control-row">
+                        <input type="range" id="globalScale" min="1" max="100" value="100">
+                        <span class="range-value" id="globalScaleValue">100%</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="globalMaxWidth">{{label.maxwidth}}</label>
+                    <input type="number" id="globalMaxWidth" min="0" value="0" placeholder="{{input.nolimit}}">
+                </div>
+                <div class="control-group">
+                    <label for="globalMaxHeight">{{label.maxheight}}</label>
+                    <input type="number" id="globalMaxHeight" min="0" value="0" placeholder="{{input.nolimit}}">
+                </div>
+                <div class="global-actions">
+                    <button class="btn btn-apply-all" id="btnApplyAll">{{btn.apply}}</button>
+                    <button class="btn btn-secondary" id="btnDownloadZip">{{btn.zip}}</button>
+                    <button class="btn btn-danger"    id="btnClearAll">{{btn.clear}}</button>
+                </div>
+            </div>
+
+            <div class="image-list" id="imageList" aria-live="polite"></div>
+
+            <!-- CONTENIDO SEO -->
+            <section class="seo-content" aria-label="{{seo.aria.label}}">
+
+                <div class="seo-grid">
+                    <article class="seo-card">
+                        <h2>{{seo.card1.h2}}</h2>
+                        <p>{{seo.card1.p1}}</p>
+                        <p>{{seo.card1.p2}}</p>
+                    </article>
+                    <article class="seo-card">
+                        <h2>{{seo.card2.h2}}</h2>
+                        <p>{{seo.card2.p1}}</p>
+                        <p>{{seo.card2.p2}}</p>
+                    </article>
+                    <article class="seo-card">
+                        <h2>{{seo.card3.h2}}</h2>
+                        <p>{{seo.card3.p1}}</p>
+                        <p>{{seo.card3.p2}}</p>
+                    </article>
+                    <article class="seo-card">
+                        <h2>{{seo.card4.h2}}</h2>
+                        <p>{{seo.card4.p1}}</p>
+                        <p>{{seo.card4.p2}}</p>
+                    </article>
+                </div>
+
+                <div class="seo-info">
+                    <h2>{{seo.info.h2}}</h2>
+                    <h3>{{seo.info.h3a}}</h3>
+                    <p>{{seo.info.p1}}</p>
+                    <p>{{seo.info.p2}}</p>
+
+                    <h3>{{seo.info.h3b}}</h3>
+                    <ul>{{seo.info.from}}</ul>
+
+                    <h3>{{seo.info.h3c}}</h3>
+                    <ul>{{seo.info.to}}</ul>
+                </div>
+
+                <div class="seo-faq">
+                    <h2>{{faq.title}}</h2>
+
+                    <details class="faq-item" open>
+                        <summary><h3>{{faq.q1.q}}</h3></summary>
+                        <p>{{faq.q1.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{faq.q2.q}}</h3></summary>
+                        <p>{{faq.q2.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{faq.q3.q}}</h3></summary>
+                        <p>{{faq.q3.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{faq.q4.q}}</h3></summary>
+                        <p>{{faq.q4.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{faq.q5.q}}</h3></summary>
+                        <p>{{faq.q5.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{faq.q6.q}}</h3></summary>
+                        <p>{{faq.q6.a}}</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary><h3>{{faq.q7.q}}</h3></summary>
+                        <p>{{faq.q7.a}}</p>
+                    </details>
+                </div>
+
+            </section>
+        </div>
+    </main>

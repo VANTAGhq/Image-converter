@@ -1,6 +1,6 @@
 /**
- * Punto de entrada de la aplicacion.
- * Conecta los modulos entre si y bindea los eventos del DOM.
+ * Punto de entrada de la herramienta Comprimir.
+ * Comprime imagenes al formato del tab activo (JPG por defecto, calidad 75).
  */
 (function () {
     'use strict';
@@ -18,6 +18,11 @@
     var globalScaleValue = document.getElementById('globalScaleValue');
     var globalMaxWidth = document.getElementById('globalMaxWidth');
     var globalMaxHeight = document.getElementById('globalMaxHeight');
+
+    // Inicializar formato e interfaz a JPEG/75
+    ImageStore.setFormat('jpeg');
+    globalQuality.value = 75;
+    globalQualityValue.textContent = '75%';
 
     // -- Auto-reconversion con debounce --
 
@@ -39,8 +44,6 @@
             Converter.convertAll(pending, render);
         }
     }
-
-    // -- Handlers que se pasan a CardBuilder --
 
     var cardHandlers = {
         onDownload: function (id) {
@@ -65,104 +68,55 @@
         }
     };
 
-    // -- Render --
-
     function render() {
         var images = ImageStore.getAll();
-
-        if (images.length > 0) {
-            globalControlsEl.classList.add('visible');
-        } else {
-            globalControlsEl.classList.remove('visible');
-        }
-
+        globalControlsEl.classList.toggle('visible', images.length > 0);
         imageListEl.textContent = '';
         images.forEach(function (img) {
             imageListEl.appendChild(CardBuilder.build(img, cardHandlers));
         });
     }
 
-    // -- Gestion de archivos --
-
     function handleFiles(fileList) {
         for (var i = 0; i < fileList.length; i++) {
             if (Utils.isValidImageType(fileList[i].type)) {
-                ImageStore.add(fileList[i]);
+                var img = ImageStore.add(fileList[i]);
+                img.quality = parseInt(globalQuality.value, 10);
             }
         }
         render();
     }
 
-    // -- Eventos: Dropzone --
-
+    // Dropzone
     dropzone.addEventListener('click', function () { fileInput.click(); });
-
-    dropzone.addEventListener('dragover', function (e) {
-        e.preventDefault();
-        dropzone.classList.add('dragover');
-    });
-
-    dropzone.addEventListener('dragleave', function () {
-        dropzone.classList.remove('dragover');
-    });
-
+    dropzone.addEventListener('dragover', function (e) { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', function () { dropzone.classList.remove('dragover'); });
     dropzone.addEventListener('drop', function (e) {
         e.preventDefault();
         dropzone.classList.remove('dragover');
         handleFiles(e.dataTransfer.files);
     });
-
     fileInput.addEventListener('change', function () {
         handleFiles(fileInput.files);
         fileInput.value = '';
     });
 
-    // -- Deteccion de soporte y aviso --
-
-    function updateFormatWarning(format) {
-        Utils.checkFormatSupport(format).then(function (supported) {
-            if (!supported) {
-                formatWarningEl.textContent = format.toUpperCase() + ' ' + I18n.t('warn.unsupported');
-                formatWarningEl.classList.remove('hidden');
-            } else {
-                formatWarningEl.classList.add('hidden');
-            }
-        });
-    }
-
-    // Precargar deteccion de ambos formatos
-    Utils.checkFormatSupport('webp');
-    Utils.checkFormatSupport('avif');
-
-    // -- Eventos: Pestanas de formato --
-
+    // Tabs de formato (para comprimir a un formato concreto si el usuario lo elige)
     formatTabsEl.addEventListener('click', function (e) {
         var tab = e.target.closest('.tab');
         if (!tab) return;
-
         var format = tab.dataset.format;
         if (format === ImageStore.getFormat()) return;
-
         var tabs = formatTabsEl.querySelectorAll('.tab');
-        for (var i = 0; i < tabs.length; i++) {
-            tabs[i].classList.remove('active');
-        }
+        for (var i = 0; i < tabs.length; i++) { tabs[i].classList.remove('active'); }
         tab.classList.add('active');
-
-        updateFormatWarning(format);
         ImageStore.setFormatAll(format);
         reconvertAll();
     });
 
-    // -- Eventos: Controles globales --
-
-    globalQuality.addEventListener('input', function () {
-        globalQualityValue.textContent = this.value + '%';
-    });
-
-    globalScale.addEventListener('input', function () {
-        globalScaleValue.textContent = this.value + '%';
-    });
+    // Controles globales
+    globalQuality.addEventListener('input', function () { globalQualityValue.textContent = this.value + '%'; });
+    globalScale.addEventListener('input', function () { globalScaleValue.textContent = this.value + '%'; });
 
     document.getElementById('btnApplyAll').addEventListener('click', function () {
         ImageStore.applyToAll({
@@ -182,11 +136,6 @@
         ImageStore.clear();
     });
 
-    // -- Suscripcion a cambios del store --
-
     ImageStore.onChange(render);
-
-    // -- Inicializar i18n (deteccion de idioma y aplicacion de traducciones) --
-
     I18n.init();
 })();
